@@ -1,0 +1,64 @@
+{% extends 'core/layout.html.twig' %}
+
+{% block body %}
+<div class="container">
+
+    <div class="jumbotron jumbotron-fluid">
+        <span class="float-right">{{ post.getCreatedAt|date('Y-m-d') }}</span>
+        <div class="container">
+            <div class="row">
+                <div class="display-4">{{ post.title }} </div>
+            </div>
+            <p class="lead">{{ post.content }}</p>
+        </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Post {{ post.id }}</li>
+        </ol>
+
+    </nav>
+
+    {% if  is_granted('ROLE_USER')%}
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="">
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-group">
+                    <button class="btn btn-primary float-right">Send</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+        <br>
+        <br>
+    {% else %}
+        <p> Login <a href="{{ path('login_form') }}">HERE </a>to create new comment.</p>
+    {% endif %}
+
+    <div class="container">
+        {% for comment in post.comments %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ comment.user.firstname }} {{ comment.user.lastname }}</h5>
+                    <p class="card-text">{{ comment.content }}</p>
+                    {% if is_granted('editable', comment) %}
+                        <a href="#" class="card-link">TO DO Edit</a>
+                    {% endif %}
+                    {% if is_granted('deletable', comment) %}
+                        <a href="#" class="card-link">TO DO Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="style1">
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
+

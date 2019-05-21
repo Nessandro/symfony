@@ -1,0 +1,17 @@
+{% extends 'core/layout.html.twig' %}
+
+{% block body %}
+    <h1>
+        Posts:
+    </h1>
+    {% for row in pagination %}
+        <div>
+            <a href="{{ path('show_post',{id: row.id }) }}" ><h2>{{ row.title }}</h2></a>
+            <p>{{ row.content }}</p>
+        </div>
+    {% endfor %}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}
