@@ -27,11 +27,6 @@ class Post
     private $content;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $src;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $created_at;
@@ -52,6 +47,12 @@ class Post
      * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
      */
     private $user;
+
+    /**
+     * @var
+     * @ORM\Column(type="string")
+     */
+    private $image;
 
     public function __construct()
     {
@@ -114,18 +115,6 @@ class Post
         return $this;
     }
 
-    public function getSrc(): ?string
-    {
-        return $this->src;
-    }
-
-    public function setSrc(?string $src): self
-    {
-        $this->src = $src;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -148,5 +137,17 @@ class Post
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
     }
 }

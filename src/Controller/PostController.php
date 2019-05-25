@@ -19,8 +19,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class PostController  extends AbstractController
+class PostController extends AbstractController
 {
 
     /**
@@ -28,16 +29,14 @@ class PostController  extends AbstractController
      */
     public function showPost(Post $post, Request $request)
     {
-        if($this->isGranted('ROLE_USER'))
-        {
+        if ($this->isGranted('ROLE_USER')) {
             $comment = new Comment();
             $comment->setPost($post);
 
             $form = $this->createForm(CommentType::class, $comment);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid())
-            {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $comment->setUser($this->getUser());
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($comment);
@@ -45,7 +44,7 @@ class PostController  extends AbstractController
 
                 $this->addFlash('success', 'The comment has been added succesfully.');
 
-                return $this->redirectToRoute('show_post', ['id' =>$post->getId()]);
+                return $this->redirectToRoute('show_post', ['id' => $post->getId()]);
             }
         }
 
@@ -60,24 +59,36 @@ class PostController  extends AbstractController
      */
     public function addPost(Request $request)
     {
-        if($this->isGranted('ROLE_USER'))
-        {
+        if ($this->isGranted('ROLE_USER')) {
             $post = new Post();
 
             $form = $this->createForm(PostType::class, $post);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid())
-            {
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                /* @var $file \Symfony\Component\HttpFoundation\File\UploadedFile */
+                $file = $post->getImage();
+                $fileName = $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                try {
+
+                    $file->move($this->getParameter('images_directory'), $fileName);
+
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Uplod File Error' . $e->getMessage());
+                    return $this->redirectToRoute('post_new', []);
+                }
+
                 $post->setUser($this->getUser());
-                $post->setSrc('placeHodler');
+                $post->setImage($fileName);
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($post);
                 $manager->flush();
 
                 $this->addFlash('success', 'The post has been created succesfully.');
 
-                return $this->redirectToRoute('show_post', ['id' =>$post->getId()]);
+                return $this->redirectToRoute('show_post', ['id' => $post->getId()]);
             }
         }
 
