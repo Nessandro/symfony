@@ -16,8 +16,13 @@
                                 <a class="nav-link" href="{{ path('homepage') }}">Posts</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('homepage') }}">About</a>
+                                <a class="nav-link" href="{{ path('about') }}">About</a>
                             </li>
+                            {% if  is_granted('ROLE_USER')%}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('post_new') }}">New Post</a>
+                                </li>
+                            {% endif %}
                         </ul>
                         <div class="form-inline" style="color: ghostwhite;">
                             {% if  is_granted('ROLE_USER')%}
@@ -27,8 +32,6 @@
                                 <a class="nav-link" href="{{ path('login_form') }}">Login</a>
                                 <a class="nav-link" href="{{ path('registration') }}">Registration</a>
                             {%  endif %}
-{#                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">#}
-{#                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>#}
                         </div>
                     </div>
                 </nav>

@@ -24,14 +24,17 @@
                 <input type="password" id="password" name="_password" required="required" class="form-control">
             </div>
             <div class="form-group">
-                <button type="submit" id="Login" name="Login" class="btn-secondary btn">Login</button>
+                <div>
+                    <button type="submit" id="Login" name="Login" class="btn btn-primary">Login</button>
+                </div>
+                <div class="text-right">
+                    <a href="{{ path('registration') }}" >Register</a>
+                </div>
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">
 
-            <small class="d-block text-right mt-2">
-                <a href="{{ path('registration') }}">Register</a>
-            </small>
+
         </div>
     </form>
 {% endblock %}
