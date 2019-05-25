@@ -28,15 +28,10 @@ class HomeController extends AbstractController
      */
     public function index(PaginatorInterface $paginator, Request $request)
     {
-        $qb = $this->getDoctrine()
-            ->getManager()
-            ->createQueryBuilder()
-            ->from('App\Entity\Post','p')
-            ->select('p');
-
+        $posts = $this->getDoctrine()->getRepository(Post::class);
 
         return $this->render('app/homepage.html.twig',[
-            'pagination' => $paginator->paginate($qb, $request->query->getInt('page',1),5),
+            'pagination' => $paginator->paginate($posts->findAll(), $request->query->getInt('page',1),5),
         ]);
     }
 
