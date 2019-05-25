@@ -17,11 +17,6 @@ class Post
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $uid;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -58,6 +53,11 @@ class Post
      */
     private $user;
 
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+    }
+
     public function __toString()
     {
         return $this->title;
@@ -66,18 +66,6 @@ class Post
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUid(): ?int
-    {
-        return $this->uid;
-    }
-
-    public function setUid(int $uid): self
-    {
-        $this->uid = $uid;
-
-        return $this;
     }
 
     public function setUser($user): self
