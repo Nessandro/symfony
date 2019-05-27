@@ -17,11 +17,6 @@ class Post
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $uid;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -30,11 +25,6 @@ class Post
      * @ORM\Column(type="text")
      */
     private $content;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $src;
 
     /**
      * @ORM\Column(type="datetime")
@@ -58,6 +48,17 @@ class Post
      */
     private $user;
 
+    /**
+     * @var
+     * @ORM\Column(type="string")
+     */
+    private $image;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+    }
+
     public function __toString()
     {
         return $this->title;
@@ -66,18 +67,6 @@ class Post
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUid(): ?int
-    {
-        return $this->uid;
-    }
-
-    public function setUid(int $uid): self
-    {
-        $this->uid = $uid;
-
-        return $this;
     }
 
     public function setUser($user): self
@@ -126,18 +115,6 @@ class Post
         return $this;
     }
 
-    public function getSrc(): ?string
-    {
-        return $this->src;
-    }
-
-    public function setSrc(?string $src): self
-    {
-        $this->src = $src;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -160,5 +137,17 @@ class Post
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
     }
 }
