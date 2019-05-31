@@ -14,7 +14,9 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\CommentType;
 use App\Form\PostType;
+use App\Libs\LoggManager\Logs\UploadFileLog;
 use App\Repository\PostRepository;
+use App\Services\Logger;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,9 +59,10 @@ class PostController extends AbstractController
     /**
      * @Route("/add/article", name="post_new")
      */
-    public function addPost(Request $request)
+    public function addPost(Request $request, Logger $logger)
     {
-        if ($this->isGranted('ROLE_USER')) {
+        if ($this->isGranted('ROLE_USER'))
+        {
             $post = new Post();
 
             $form = $this->createForm(PostType::class, $post);
@@ -75,8 +78,13 @@ class PostController extends AbstractController
 
                     $file->move($this->getParameter('images_directory'), $fileName);
 
+                    $logger->info(new UploadFileLog($file, UploadFileLog::TYPE_UPLOAD));
+
                 } catch (FileException $e) {
                     $this->addFlash('error', 'Uplod File Error' . $e->getMessage());
+
+                    $logger->error(new UploadFileLog($file, UploadFileLog::TYPE_UPLOAD));
+
                     return $this->redirectToRoute('post_new', []);
                 }
 

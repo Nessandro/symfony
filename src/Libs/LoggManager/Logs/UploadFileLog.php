@@ -15,7 +15,7 @@ class UploadFileLog extends AbstractLog
     protected $file;
     protected $type;
 
-    public function __construct(UploadedFile $file, string $type = UploadFileLog::TYPE_UPLOAD)
+    public function __construct(UploadedFile $file, $type = UploadFileLog::TYPE_UPLOAD)
     {
         $this->file = $file;
         $this->type = $type;
@@ -23,6 +23,8 @@ class UploadFileLog extends AbstractLog
 
     public function getMessage(): string
     {
+        //todo Update message by file
+
         return "Place Holder";
     }
 }
