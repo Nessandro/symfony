@@ -7,7 +7,7 @@
  * @package App\Controller
  */
 
-namespace App\Controller;
+namespace App\Controller\Base;
 
 
 use App\Entity\User;
